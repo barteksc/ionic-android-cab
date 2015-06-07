@@ -1,0 +1,31 @@
+{
+  "name": "ionic-android-cab",
+  "version": "0.0.1",
+  "homepage": "https://github.com/barteksc/ionic-android-cab",
+  "authors": [
+    "Bartosz Schiller <bartosz.schiller@gmail.com>"
+  ],
+  "description": "Ionic Android Contextual Action Bar",
+  "main": "android-cab.js",
+  "dependencies": {
+      "ionic": ">=1.0.0-beta.14"
+  },
+  "keywords": [
+    "ionic",
+    "android",
+    "cab",
+    "contextual",
+    "action",
+    "bar",
+    "angular",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

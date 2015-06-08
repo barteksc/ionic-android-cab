@@ -135,6 +135,9 @@
             };
 
             function show() {
+                if(this.isShown()) {
+                    return;
+                }
                 dragContentState = $ionicSideMenuDelegate.canDragContent();
                 if (!firstShow) {
                     firstShow = true;

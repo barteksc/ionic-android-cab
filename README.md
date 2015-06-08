@@ -34,6 +34,8 @@ CAB shows automatically when adding first element and hides after removing selec
 
 Some (default 2) number of actions is visible on action bar as icons, others are accessible via popover as title without icons.
 
+If side menu with drag content is enabled, it will be disabled on CAB show and enabled on CAB hide.
+
 Check `demo/index.html` for working example.
 
 ## Options

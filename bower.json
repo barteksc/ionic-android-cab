@@ -8,7 +8,8 @@
   "description": "Ionic Android Contextual Action Bar",
   "main": "android-cab.js",
   "dependencies": {
-      "ionic": ">=1.0.0-beta.14"
+      "ionic": ">=1.0.0-rc.0",
+      "lodash": ">=3.6.0"
   },
   "keywords": [
     "ionic",

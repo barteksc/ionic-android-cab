@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+<head lang="en">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta charset="UTF-8">
+    <title>Ionic Android Contextual Action Bar</title>
+    <link href="http://code.ionicframework.com/1.0.0-rc.0/css/ionic.min.css" rel="stylesheet">
+    <script src="http://code.ionicframework.com/1.0.0-rc.0/js/ionic.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.6.0/lodash.min.js"></script>
+    <script src="../android-cab.js"></script>
+    <style>
+        .selected .item-content {
+            background-color: #c4c4c4;
+        }
+    </style>
+    <script>
+        angular.module('demoApp', ['ionic', 'barteksch.cab'])
+                .controller('DemoCtrl', DemoCtrl);
+
+        DemoCtrl.$inject = ['$scope', '$androidCab'];
+
+        function DemoCtrl($scope, $androidCab) {
+
+            $scope.languages = [
+                {id: 1, name: 'Java'},
+                {id: 2, name: 'SQL'},
+                {id: 3, name: 'C++'},
+                {id: 4, name: 'C#'},
+                {id: 5, name: 'JavaScript'}
+            ];
+
+            var cab = $androidCab.prepare({
+                actions: [
+                    {
+                        icon: 'ion-trash-b',
+                        title: 'Delete',
+                        click: function (event, items) {
+                            console.log('Delete items: ' + _.pluck(items, 'id').join());
+                        }
+                    },
+                    {
+                        icon: 'ion-edit',
+                        title: 'Edit',
+                        click: function (event, items) {
+                            console.log('Edit items: ' + _.pluck(items, 'id').join());
+                        }
+                    },
+                    {
+                        icon: 'ion-scissors',
+                        title: 'Cut',
+                        click: function (event, items) {
+                            console.log('Cut items: ' + _.pluck(items, 'id').join());
+                        }
+                    },
+                    {
+                        icon: 'ion-ios-copy-outline',
+                        title: 'Copy',
+                        click: function (event, items) {
+                            console.log('Copy items: ' + _.pluck(items, 'id').join());
+                        }
+                    }
+                ],
+                onFirstShow: function() {
+                    console.log('Showing CAB for the first time');
+                },
+                onShow: function() {
+                    console.log('Showing CAB');
+                },
+                onHide: function(items) {
+                    console.log('Hiding CAB with items: ' + _.pluck(items, 'id').join());
+                },
+                onDestroy: function() {
+                    console.log('Destroying CAB');
+                }
+            });
+
+            $scope.onHold = function (item) {
+                cab.toggleItem(item);
+            };
+
+            $scope.onClick = function (item) {
+                if (cab.isShown()) { // select element on click only when CAB is active
+                    cab.toggleItem(item);
+                }
+            };
+
+            $scope.$on('$ionicView.leave', function () { // don't forget to free resources
+                cab.destroy();
+            });
+        }
+    </script>
+</head>
+<body ng-controller="DemoCtrl">
+<ion-header-bar class="bar-positive">
+    <h1 class="title">CAB demo</h1>
+</ion-header-bar>
+<ion-content class="has-header">
+    <ion-list>
+        <ion-item ng-repeat="lang in languages" on-hold="onHold(lang)" ng-click="onClick(lang)"
+                  ng-class="{selected: lang.selected}" href>
+            {{ lang.name }}
+        </ion-item>
+    </ion-list>
+    <h4>Long-press list item to activate contextual action bar</h4>
+</ion-content>
+</body>
+</html>

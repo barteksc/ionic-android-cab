@@ -12,15 +12,16 @@
             fontColor: '#FFFFFF',
             counterSize: 18,
             height: 44,
-            zIndex: 8,
+            zIndex: 9,
             actionsOnBar: 2,
             showCounter: true,
+            selectedProp: 'selected',
             useAnimation: true,
             onShow: function () {
             },
             onHide: function () {
             },
-            onRemove: function () {
+            onDestroy: function () {
             },
             onFirstShow: function () {
             }
@@ -92,10 +93,16 @@
                 scope: scope
             });
 
-            this.addItem = function (item) {
-                scope.selectedItems.push(item);
-                if (scope.selectedItems.length === 1) {
-                    this.show();
+            this.toggleItem = function (item) {
+                if (options.selectedProp in item) {
+                    this.removeItem(item)
+                    delete item[options.selectedProp];
+                } else {
+                    item[options.selectedProp] = true;
+                    scope.selectedItems.push(item);
+                    if (scope.selectedItems.length === 1) {
+                        this.show();
+                    }
                 }
             };
 
@@ -104,7 +111,10 @@
                 if (scope.selectedItems.length === 0) {
                     this.hide();
                 }
-                console.log('items: ' + scope.selectedItems.length);
+            };
+
+            this.hasItem = function (condition) {
+                return !!_.findWhere(scope.selectedItems, condition);
             };
 
             this.pushAction = function (action) {
@@ -117,7 +127,7 @@
 
             this.destroy = function () {
                 hide();
-                options.onRemove();
+                options.onDestroy();
                 scope.$destroy();
                 $body = undefined;
                 popover.remove();
@@ -130,7 +140,7 @@
                     firstShow = true;
                     options.onFirstShow();
                 } else {
-                    options.onShow(scope.selectedItems);
+                    options.onShow();
                 }
                 barCss.display = 'block';
                 if (dragContentState) {
@@ -141,6 +151,9 @@
 
             function hide() {
                 options.onHide(scope.selectedItems);
+                angular.forEach(scope.selectedItems, function (item) {
+                    delete item[options.selectedProp];
+                });
                 scope.selectedItems = [];
                 barCss.display = 'none';
                 if (dragContentState) {
@@ -170,8 +183,8 @@
             }
 
             function actionVisible(action) {
-                if(action.show) {
-                   return action.show(scope.selectedItems);
+                if (action.show) {
+                    return action.show(scope.selectedItems);
                 }
                 return true;
             }
